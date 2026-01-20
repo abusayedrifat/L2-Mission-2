@@ -80,6 +80,8 @@ const server = http.createServer((req, res) => {
 
     res.end("Todo created")
   }
+
+
   //* get single todo
   else if (pathname === "/todo" && req.method === "GET") {
     const title = url.searchParams.get("title");
@@ -97,6 +99,8 @@ const server = http.createServer((req, res) => {
     })
     res.end(stringifiedTodo)
   }
+
+  
   //* update a todo
   else if (pathname === "/todos/update-todo" && req.method === "PATCH") {
     const title = url.searchParams.get("title");

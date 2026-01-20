@@ -25,7 +25,7 @@ const fs = require("fs");
 
 
 
-//todo:===================== fileSystem asncronus way ========================//
+//todo:===================== fileSystem asyncronus way ========================//
 
 
 
