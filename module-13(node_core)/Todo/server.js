@@ -19,6 +19,7 @@ const server = http.createServer((req, res) => {
     const data = fs.readFileSync(filePath, {
       encoding: 'utf-8'
     })
+
     // res.end("All Todos")
 
     // res.setHeader("content-type",'text/palin')
@@ -48,6 +49,7 @@ const server = http.createServer((req, res) => {
         title,
         body
       } = JSON.parse(data)
+      
       console.log({
         title,
         body
@@ -100,7 +102,7 @@ const server = http.createServer((req, res) => {
     res.end(stringifiedTodo)
   }
 
-  
+
   //* update a todo
   else if (pathname === "/todos/update-todo" && req.method === "PATCH") {
     const title = url.searchParams.get("title");
@@ -111,22 +113,26 @@ const server = http.createServer((req, res) => {
     });
 
     req.on("end", () => {
-        const { body } = JSON.parse(data);
+      const {
+        body
+      } = JSON.parse(data);
 
-        const allTodos = fs.readFileSync(filePath, { encoding: "utf-8" });
-        const parsedAllTodos = JSON.parse(allTodos);
+      const allTodos = fs.readFileSync(filePath, {
+        encoding: "utf-8"
+      });
+      const parsedAllTodos = JSON.parse(allTodos);
 
-        const todoIndex = parsedAllTodos.findIndex(
-          (todo) => todo.title === title
-        );
+      const todoIndex = parsedAllTodos.findIndex(
+        (todo) => todo.title === title
+      );
 
-        parsedAllTodos[todoIndex].body = body;
+      parsedAllTodos[todoIndex].body = body;
 
-        fs.writeFileSync(filePath, JSON.stringify(parsedAllTodos, null, 2), {
-          encoding: "utf-8",
-        })
-  })
-    
+      fs.writeFileSync(filePath, JSON.stringify(parsedAllTodos, null, 2), {
+        encoding: "utf-8",
+      })
+    })
+
   } else {
     res.end('Error(404): Not Found')
   }
