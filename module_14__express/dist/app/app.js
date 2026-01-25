@@ -6,9 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const path_1 = __importDefault(require("path"));
 const todos_routes_1 = require("./todos/todos.routes");
-// const express = require('express')
 const app = (0, express_1.default)();
-const port = 5000;
 app.use(express_1.default.json());
 app.use('/todos', todos_routes_1.todosRouter);
 const filePath = path_1.default.join(__dirname, "../../DB/data.json");

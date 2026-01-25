@@ -31,3 +31,10 @@ exports.todosRouter.post('/create_todo', (req, res) => {
     console.log(title);
     console.log(body);
 });
+exports.todosRouter.put('/updateTodo', (req, res) => {
+    const data = req.body;
+    res.send('updated data');
+});
+exports.todosRouter.delete('/detailsTodo', (req, res) => {
+    res.send('hello. todos deleted');
+});

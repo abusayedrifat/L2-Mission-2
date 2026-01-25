@@ -49,7 +49,7 @@ const server = http.createServer((req, res) => {
         title,
         body
       } = JSON.parse(data)
-      
+
       console.log({
         title,
         body

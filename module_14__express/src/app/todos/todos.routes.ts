@@ -37,3 +37,15 @@ todosRouter.post('/create_todo', (req: Request, res: Response) => {
     console.log(title);
     console.log(body);
 })
+
+todosRouter.put('/updateTodo',(req: Request, res: Response) => {
+    const data = req.body;
+    res.send('updated data')
+    
+})
+
+
+todosRouter.delete('/detailsTodo',(req: Request, res: Response) => {
+    res.send('hello. todos deleted')
+   
+})
