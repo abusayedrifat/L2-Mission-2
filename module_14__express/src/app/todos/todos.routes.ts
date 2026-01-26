@@ -1,51 +1,56 @@
-import express, { Request, Response } from 'express'
-import path from 'path'
-import fs from 'fs'
+import express, { Request, Response } from "express";
+import path from "path";
+import fs from "fs";
+import { client } from "../../config/mongodb";
 
-export const todosRouter = express.Router()
+export const todosRouter = express.Router();
 
 
-const filePath = path.join(__dirname, "../../../DB/data.json")
+todosRouter.get("/", async (req: Request, res: Response) => {
 
-todosRouter.get('/', (req: Request, res: Response) => {
-
-    const data = fs.readFileSync(filePath, { encoding: "utf-8" })
-    console.log('from todosRouter');
+    const todosCollection = client.db("todosDB").collection("todos");
+    const cursor = todosCollection.find({})
+    const todos = await cursor.toArray()
 
     res.json({
         message: "from todosRouterrr",
-        data
-    })
-
-})
+        todos,
+    });
+});
 
 // app.get('/allTodo',( req:Request, res:Response) =>{
 
 //   const data = fs.readFileSync(filePath, {encoding:"utf-8"})
 //   res.json(data)
-//   console.log("from query",req.query);        
+//   console.log("from query",req.query);
 //   console.log("from params",req.params);
 
 // })
 
-
-todosRouter.post('/create_todo', (req: Request, res: Response) => {
-    const data = req.body;
-    res.send('hello')
-    const { title, body } = data
-    console.log(data);
-    console.log(title);
-    console.log(body);
-})
-
-todosRouter.put('/updateTodo',(req: Request, res: Response) => {
-    const data = req.body;
-    res.send('updated data')
+todosRouter.post("/create_todo", async (req: Request, res: Response) => {
     
-})
-
-
-todosRouter.delete('/detailsTodo',(req: Request, res: Response) => {
-    res.send('hello. todos deleted')
+    const todosCollection = client.db("todosDB").collection("todos");
    
-})
+    const todos = req.body;
+    const { title, description, priority } = todos;
+    console.log (todos);
+    
+
+    todosCollection.insertOne({
+        title: title,
+        description: description,
+        priority: priority,
+        isComplete: false
+    })
+    res.json(todos)
+
+});
+
+todosRouter.put("/updateTodo", (req: Request, res: Response) => {
+    const data = req.body;
+    res.send("updated data");
+});
+
+todosRouter.delete("/detailsTodo", (req: Request, res: Response) => {
+    res.send("hello. todos deleted");
+});
