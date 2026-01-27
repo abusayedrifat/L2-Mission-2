@@ -1,10 +1,6 @@
-// import { Response } from 'express';
-// import { Request } from 'express';
 
 
 import express, { Application, NextFunction, Request, Response, } from 'express';
-import path, { dirname } from 'path';
-import fs from 'fs';
 import { todosRouter } from './todos/todos.routes';
 
 const app: Application = express()
@@ -14,15 +10,35 @@ app.use('/todos', todosRouter)
 
 
 
-const filePath = path.join(__dirname, "../../DB/data.json")
-
-
-
 app.get('/', (req: Request, res: Response , next:NextFunction) => {
   // console.log({res})
 
   res.send('Hello World!')
   next()
+})
+
+
+app.get('/error', 
+  
+  async(req:Request, res:Response, next:NextFunction)=>{
+ try {
+  
+  res.send('error er duniya')
+ } catch (error) {
+  next(error)
+ }
+
+
+})
+
+
+
+
+
+app.use((req:Request , res:Response )=>{
+  res.status(404).json({
+    message:"routes not found"
+  })
 })
 
 
