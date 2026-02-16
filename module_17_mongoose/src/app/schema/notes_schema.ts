@@ -1,4 +1,5 @@
 import { model, Schema } from "mongoose";
+import { notes } from "../interfaces/notes_interface";
 
 
 
@@ -11,7 +12,7 @@ import { model, Schema } from "mongoose";
 //     content: {type:String, default:''} //todo: conventional types
 // })
 
-const noteSchema = new Schema({
+const noteSchema = new Schema<notes>({
     title: { type: String, required: true, trim: true },
     content: { type: String, default: '' },
     category: {
