@@ -1,10 +1,17 @@
 
+export interface address {
+    city:string,
+    road: string,
+    postalCode : number
+}
+
 export interface users {
     name: {
         firstName: string;
         lastName: string
     },
-    address: string,
+    age:number,
+    address: address,
     email: string,
     role: "user" | "admin"
 }

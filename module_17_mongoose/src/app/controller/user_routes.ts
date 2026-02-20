@@ -1,7 +1,43 @@
 import express, { Request, Response } from 'express'
 import { Users } from '../schema/users_schema'
+import z, { success } from 'zod'
 
 export const usersRoutes = express.Router()
+
+
+const createUserWithZodSchema = z.object({
+    name:z.string(),
+    age: z.number(),
+    address: z.string(),
+    email: z.string(),
+    role: z.string().optional()
+})
+
+usersRoutes.post('/create-user',async(req:Request,  res:Response)=>{
+
+    try {
+        //  const body = await createUserWithZodSchema.parseAsync(req.body)
+        const body = req.body;
+    const allUsers = await Users.create(body)
+    // console.log(body);
+    
+    res.status(202).json({
+        success:true,
+        message:'sucessfull',
+         user:allUsers 
+    })
+
+    } catch (error :any) {
+          res.status(400).json({
+        success:false,
+        message:error.message,
+         error
+    })
+    }
+    
+   
+})
+
 
 usersRoutes.get('/',async(req:Request,  res:Response)=>{
     
@@ -16,12 +52,6 @@ usersRoutes.get('/:userID',async(req:Request,  res:Response)=>{
     res.json(user)
 })
 
-usersRoutes.post('/create-user',async(req:Request,  res:Response)=>{
-    
-    const body = req.body
-    const allUsers = await Users.create(body)
-    res.json(allUsers)
-})
 
 usersRoutes.patch('/update/:updateID',async(req:Request,  res:Response)=>{
     
