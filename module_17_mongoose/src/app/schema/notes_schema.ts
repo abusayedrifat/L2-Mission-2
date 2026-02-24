@@ -1,4 +1,5 @@
-import { model, Schema } from "mongoose";
+
+import { model, Schema, Types } from "mongoose";
 import { notes } from "../interfaces/notes_interface";
 
 
@@ -24,6 +25,11 @@ const noteSchema = new Schema<notes>({
     tags: {
         label: { type: String, required: true },
         color: { type: String, default: 'gray' }
+    },
+    user:{
+        type: Schema.Types.ObjectId,
+        ref:"Users",
+        required:true
     }
 },
     {

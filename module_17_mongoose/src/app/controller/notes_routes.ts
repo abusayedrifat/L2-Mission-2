@@ -6,12 +6,12 @@ export const notesRoutes = express.Router()
 
 
 notesRoutes.get('/', async (req: Request, res: Response) => {
-    const allNotes = await Note.find()
+    const allNotes = await Note.find().populate('user')
     res.json(allNotes)
 })
 
 
-notesRoutes.post('/create-post', async (req: Request, res: Response) => {
+notesRoutes.post('/create-note', async (req: Request, res: Response) => {
 
     const body = req.body;
 
