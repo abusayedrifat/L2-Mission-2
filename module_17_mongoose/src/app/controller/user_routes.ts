@@ -1,72 +1,69 @@
-import express, { Request, Response } from 'express'
-import { Users } from '../schema/users_schema'
-import z, { success } from 'zod'
+import express, { Request, Response } from "express";
+import bcrypt from "bcrypt";
+import { Users } from "../schema/users_schema";
+import z, { success } from "zod";
 
-export const usersRoutes = express.Router()
-
+export const usersRoutes = express.Router();
 
 const createUserWithZodSchema = z.object({
-    name:z.string(),
-    age: z.number(),
-    address: z.string(),
-    email: z.string(),
-    role: z.string().optional()
-})
+  name: z.string(),
+  age: z.number(),
+  address: z.string(),
+  email: z.string(),
+  role: z.string().optional(),
+});
 
-usersRoutes.post('/create-user',async(req:Request,  res:Response)=>{
+usersRoutes.post("/create-user", async (req: Request, res: Response) => {
+  try {
+    //  const body = await createUserWithZodSchema.parseAsync(req.body)
+    const body = req.body;
 
-    try {
-        //  const body = await createUserWithZodSchema.parseAsync(req.body)
-        const body = req.body;
-    const allUsers = await Users.create(body)
+    const password = await bcrypt.hash(body.password, 10);
+    body.password = password;
+    console.log(password);
+    
+    const allUsers = await Users.create(body);
     // console.log(body);
-    
+
     res.status(202).json({
-        success:true,
-        message:'sucessfull',
-         user:allUsers 
-    })
+      success: true,
+      message: "sucessfull",
+      user: allUsers,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+      error,
+    });
+  }
+});
 
-    } catch (error :any) {
-          res.status(400).json({
-        success:false,
-        message:error.message,
-         error
-    })
-    }
-    
-   
-})
+usersRoutes.get("/", async (req: Request, res: Response) => {
+  const allUsers = await Users.find();
+  res.json(allUsers);
+});
 
+usersRoutes.get("/:userID", async (req: Request, res: Response) => {
+  const userID = req.params.userID;
+  const user = await Users.findById(userID);
+  res.json(user);
+});
 
-usersRoutes.get('/',async(req:Request,  res:Response)=>{
-    
-    const allUsers = await Users.find()
-    res.json(allUsers)
-})
+usersRoutes.patch("/update/:updateID", async (req: Request, res: Response) => {
+  const updateID = req.params.updateID;
+  const updateBody = req.body;
+  const updateUser = await Users.findByIdAndUpdate(updateID, updateBody, {
+    new: true,
+  });
+  res.json(updateUser);
+});
 
-usersRoutes.get('/:userID',async(req:Request,  res:Response)=>{
-    
-    const userID = req.params.userID;
-    const user = await Users.findById(userID);
-    res.json(user)
-})
-
-
-usersRoutes.patch('/update/:updateID',async(req:Request,  res:Response)=>{
-    
-    const updateID = req.params.updateID
-    const updateBody = req.body
-    const updateUser = await Users.findByIdAndUpdate(updateID, updateBody,{new:true})
-    res.json(updateUser)
-})
-
-usersRoutes.delete('/delete/:deleteID',async(req:Request,  res:Response)=>{
-    
-    const deleteID = req.params.deleteID;
-    const deleteUser = await Users.findByIdAndDelete(deleteID)
-    res.json({
-        message:'deleted successfuly',
-        deleteUser
-    })
-})
+usersRoutes.delete("/delete/:deleteID", async (req: Request, res: Response) => {
+  const deleteID = req.params.deleteID;
+  const deleteUser = await Users.findByIdAndDelete(deleteID);
+  res.json({
+    message: "deleted successfuly",
+    deleteUser,
+  });
+});

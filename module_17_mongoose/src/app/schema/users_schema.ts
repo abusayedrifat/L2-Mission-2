@@ -64,6 +64,11 @@ export const usersSchema = new Schema<users>(
     
     },//*built-in validator in mongoose
       default: "user",
+    },
+    password: {
+      type: String,
+      required: true,
+      minLength: 5
     }
   },
 

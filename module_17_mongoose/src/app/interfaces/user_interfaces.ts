@@ -13,6 +13,7 @@ export interface users {
     age:number,
     address: address,
     email: string,
-    role: "user" | "admin"
+    role: "user" | "admin",
+    password: string
 }
 

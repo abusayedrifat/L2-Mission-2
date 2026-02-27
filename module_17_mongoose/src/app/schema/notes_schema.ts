@@ -40,4 +40,3 @@ const noteSchema = new Schema<notes>({
 )
 
 export const Note = model('Note', noteSchema)
-
