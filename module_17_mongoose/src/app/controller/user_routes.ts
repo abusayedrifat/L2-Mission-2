@@ -1,6 +1,6 @@
+import { Users } from './../schema/users_schema';
 import express, { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import { Users } from "../schema/users_schema";
 import z, { success } from "zod";
 
 export const usersRoutes = express.Router();
@@ -17,14 +17,14 @@ usersRoutes.post("/create-user", async (req: Request, res: Response) => {
   try {
     //  const body = await createUserWithZodSchema.parseAsync(req.body)
     const body = req.body;
-
-    const password = await bcrypt.hash(body.password, 10);
-    body.password = password;
-    console.log(password);
     
     const allUsers = await Users.create(body);
     // console.log(body);
 
+ const password  = await  allUsers.hashPassword(body.password)
+ allUsers.password = password
+ console.log(password);
+ 
     res.status(202).json({
       success: true,
       message: "sucessfull",

@@ -17,3 +17,6 @@ export interface users {
     password: string
 }
 
+export interface userInstanceMethod{
+hashPassword(password:string):string 
+}
