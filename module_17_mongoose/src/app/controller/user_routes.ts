@@ -1,4 +1,4 @@
-import { Users } from './../schema/users_schema';
+import { Users } from "./../schema/users_schema";
 import express, { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import z, { success } from "zod";
@@ -17,14 +17,28 @@ usersRoutes.post("/create-user", async (req: Request, res: Response) => {
   try {
     //  const body = await createUserWithZodSchema.parseAsync(req.body)
     const body = req.body;
-    
-    const allUsers = await Users.create(body);
-    // console.log(body);
 
- const password  = await  allUsers.hashPassword(body.password)
- allUsers.password = password
- console.log(password);
- 
+    // //* user instance method
+    // const allUsers = new Users(body);
+
+    // const password = await allUsers.hashPassword(body.password);
+    // allUsers.password = password;
+
+    // await allUsers.save()
+    
+    // console.log(password);
+
+
+    //* user static method
+    const password = await Users.hashPassword(body.password)
+    console.log(password,"satatic method");
+    
+    body.password = password
+
+    const allUsers = await Users.create(body);
+
+
+
     res.status(202).json({
       success: true,
       message: "sucessfull",

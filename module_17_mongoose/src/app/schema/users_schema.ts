@@ -2,7 +2,7 @@ import  bcrypt  from 'bcrypt';
 import validator from 'validator';
 
 import { Model, model, Schema } from "mongoose";
-import { address, userInstanceMethod, users } from "../interfaces/user_interfaces";
+import { address, userInstanceMethod, users, userStaticMethod } from "../interfaces/user_interfaces";
 
 
 //todo => we will set "_id = false" when only embedding .means it's not a collection.[ module -> 17-4 ]
@@ -15,7 +15,7 @@ const addressSubSchema = new Schema<address>({
   _id:false
 })
 
-export const usersSchema = new Schema<users, Model<users>, userInstanceMethod >(
+export const usersSchema = new Schema<users, userStaticMethod, userInstanceMethod >(
   {
     name: {
       firstName: {
@@ -84,4 +84,9 @@ usersSchema.method("hashPassword", async function(pass){
     return password
 })
 
-export const Users = model("Users", usersSchema);
+usersSchema.static("hashPassword", async function(pass){
+  const password = await bcrypt.hash(pass, 10);
+    return password
+  })
+
+export const Users = model<users, userStaticMethod>("Users", usersSchema);
