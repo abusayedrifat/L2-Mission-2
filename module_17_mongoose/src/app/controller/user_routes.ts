@@ -30,10 +30,10 @@ usersRoutes.post("/create-user", async (req: Request, res: Response) => {
 
 
     //* user static method
-    const password = await Users.hashPassword(body.password)
-    console.log(password,"satatic method");
+    // const password = await Users.hashPassword(body.password)
+    // console.log(password,"satatic method");
     
-    body.password = password
+    // body.password = password
 
     const allUsers = await Users.create(body);
 
@@ -75,7 +75,7 @@ usersRoutes.patch("/update/:updateID", async (req: Request, res: Response) => {
 
 usersRoutes.delete("/delete/:deleteID", async (req: Request, res: Response) => {
   const deleteID = req.params.deleteID;
-  const deleteUser = await Users.findByIdAndDelete(deleteID);
+  const deleteUser = await Users.findOneAndDelete({_id:deleteID});
   res.json({
     message: "deleted successfuly",
     deleteUser,

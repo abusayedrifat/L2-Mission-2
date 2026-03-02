@@ -3,6 +3,7 @@ import validator from 'validator';
 
 import { Model, model, Schema } from "mongoose";
 import { address, userInstanceMethod, users, userStaticMethod } from "../interfaces/user_interfaces";
+import { Note } from './notes_schema';
 
 
 //todo => we will set "_id = false" when only embedding .means it's not a collection.[ module -> 17-4 ]
@@ -79,14 +80,41 @@ export const usersSchema = new Schema<users, userStaticMethod, userInstanceMetho
   },
 );
 
+//*instance method
 usersSchema.method("hashPassword", async function(pass){
   const password = await bcrypt.hash(pass, 10);
     return password
 })
-
+//*static method
 usersSchema.static("hashPassword", async function(pass){
   const password = await bcrypt.hash(pass, 10);
     return password
   })
+
+  //*pre hook(middleware) for save password
+usersSchema.pre("save",async function(){
+  this.password = await bcrypt.hash(this.password, 10)
+  console.log("this is pre save hook");
+  
+})
+
+//*post hook
+usersSchema.post("save",function(){
+  console.log(`${this.email} save post hook`);
+  
+})
+
+
+//*post hook (delete all post when user is deleted)
+
+usersSchema.post("findOneAndDelete",async function(doc){
+  if (doc) {
+    
+    // console.log(doc);
+    await Note.deleteMany({user: doc._id})
+    
+  }
+})
+
 
 export const Users = model<users, userStaticMethod>("Users", usersSchema);

@@ -26,6 +26,7 @@ notesRoutes.post('/create-note', async (req: Request, res: Response) => {
 
     //     await myNote.save()
 
+    
     //* notesRoutesroach-2
     const myNote = await Note.create(body)
 
