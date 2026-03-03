@@ -1,7 +1,7 @@
 import { Users } from "./../schema/users_schema";
 import express, { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import z, { success } from "zod";
+import z, { email, success } from "zod";
 
 export const usersRoutes = express.Router();
 
@@ -25,14 +25,14 @@ usersRoutes.post("/create-user", async (req: Request, res: Response) => {
     // allUsers.password = password;
 
     // await allUsers.save()
-    
+
     // console.log(password);
 
 
     //* user static method
     // const password = await Users.hashPassword(body.password)
     // console.log(password,"satatic method");
-    
+
     // body.password = password
 
     const allUsers = await Users.create(body);
@@ -54,7 +54,25 @@ usersRoutes.post("/create-user", async (req: Request, res: Response) => {
 });
 
 usersRoutes.get("/", async (req: Request, res: Response) => {
+
   const allUsers = await Users.find();
+
+  //*filter
+  // const userEmail = req.query.email
+  // const allUsers = await Users.find({email:userEmail});
+
+  //*sort
+  // const allUsers = await Users.find().sort({email:"ascending"});
+  // const allUsers = await Users.find().sort({email:"descending"});
+  // const allUsers = await Users.find().sort({email:1});
+  // const allUsers = await Users.find().sort({email:-1});
+
+  //*limit
+  // const allUsers = await Users.find().limit(2);
+
+  //*skip
+  // const allUsers = await Users.find().skip(5);
+
   res.json(allUsers);
 });
 
@@ -75,7 +93,7 @@ usersRoutes.patch("/update/:updateID", async (req: Request, res: Response) => {
 
 usersRoutes.delete("/delete/:deleteID", async (req: Request, res: Response) => {
   const deleteID = req.params.deleteID;
-  const deleteUser = await Users.findOneAndDelete({_id:deleteID});
+  const deleteUser = await Users.findOneAndDelete({ _id: deleteID });
   res.json({
     message: "deleted successfuly",
     deleteUser,

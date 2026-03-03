@@ -1,9 +1,9 @@
 import { Model } from "mongoose";
 
 export interface address {
-    city:string,
+    city: string,
     road: string,
-    postalCode : number
+    postalCode: number
 }
 
 export interface users {
@@ -11,17 +11,17 @@ export interface users {
         firstName: string;
         lastName: string
     },
-    age:number,
+    age: number,
     address: address,
     email: string,
     role: "user" | "admin",
     password: string
 }
 
-export interface userInstanceMethod{
-hashPassword(password:string):string 
+export interface userInstanceMethod {
+    hashPassword(password: string): string
 }
 
-export  interface  userStaticMethod extends Model<users> {
-    hashPassword(password:string): string
+export interface userStaticMethod extends Model<users> {
+    hashPassword(password: string): string
 }

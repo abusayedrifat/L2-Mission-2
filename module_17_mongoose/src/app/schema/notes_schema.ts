@@ -1,10 +1,5 @@
-
 import { model, Schema, Types } from "mongoose";
 import { notes } from "../interfaces/notes_interface";
-
-
-
-
 
 // Note variable works like as a 'class'
 
@@ -13,30 +8,30 @@ import { notes } from "../interfaces/notes_interface";
 //     content: {type:String, default:''} //todo: conventional types
 // })
 
-const noteSchema = new Schema<notes>({
+const noteSchema = new Schema<notes>(
+  {
     title: { type: String, required: true, trim: true },
-    content: { type: String, default: '' },
+    content: { type: String, default: "" },
     category: {
-        type: String,
-        enum: ['personal', 'work', 'study', 'research'],
-        default: 'personal'
+      type: String,
+      enum: ["personal", "work", "study", "research"],
+      default: "personal",
     },
     pinned: { type: Boolean, default: false },
     tags: {
-        label: { type: String, required: true },
-        color: { type: String, default: 'gray' }
+      label: { type: String, required: true },
+      color: { type: String, default: "gray" },
     },
-    user:{
-        type: Schema.Types.ObjectId,
-        ref:"Users",
-        required:true
-    }
-},
-    {
-        versionKey: false,
-        timestamps: true
-    }
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "Users",
+      required: true,
+    },
+  },
+  {
+    versionKey: false,
+    timestamps: true,
+  },
+);
 
-)
-
-export const Note = model('Note', noteSchema)
+export const Note = model("Note", noteSchema);
